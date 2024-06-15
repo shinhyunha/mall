@@ -1,4 +1,4 @@
-package com.mall.biz.sample.contoller;
+package com.mall.biz.sample.service;
 
 import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +73,6 @@ public class SampleService {
         } else {
             sample.setTeam(null);
         }
-        sample.updateBaseEntity();
         sample.updateSample(updateSampleDto.dtoToSampleEntity());
     }
 

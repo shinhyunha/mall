@@ -46,5 +46,6 @@ public class Sample extends BaseEntity {
         if (sample.getSampleTeam() != null) {
             this.sampleTeam = sample.getSampleTeam();
         }
+        this.updateBaseEntity();
     }
 }

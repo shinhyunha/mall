@@ -4,6 +4,7 @@ import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
 import com.mall.biz.sample.dto.res.ReqSampleDto;
+import com.mall.biz.sample.service.SampleService;
 import com.mall.common.model.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,16 @@ public class SampleController {
     })
     public SuccessResponse searchSampleAll() {
         List<ReqSampleDto> result = sampleService.searchSampleAll();
+        return new SuccessResponse(result);
+    }
+
+    @GetMapping("/{name}")
+    @Operation(summary = "샘플 전체조회", description = "모든 샘플을 전체 조회한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "샘플 조회 성공", content = @Content(schema = @Schema(implementation = ReqSampleDto.class)))
+    })
+    public SuccessResponse searchSampleByName(@PathVariable("name") String name) {
+        ReqSampleDto result = sampleService.searchSampleByName(name);
         return new SuccessResponse(result);
     }
 
