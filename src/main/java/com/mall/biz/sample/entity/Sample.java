@@ -26,8 +26,26 @@ public class Sample extends BaseEntity {
         this.name = name;
     }
 
+    public Sample(String name, long id) {
+        this.name = name;
+        this.id = id;
+    }
+
     public Sample(String name, SampleTeam sampleTeam) {
         this.name = name;
         this.sampleTeam = sampleTeam;
+    }
+
+    public Sample(long id, String name, SampleTeam sampleTeam) {
+        this.id = id;
+        this.name = name;
+        this.sampleTeam = sampleTeam;
+    }
+
+    public void updateSample(Sample sample) {
+        this.name = sample.name;
+        if (sample.getSampleTeam() != null) {
+            this.sampleTeam = sample.getSampleTeam();
+        }
     }
 }

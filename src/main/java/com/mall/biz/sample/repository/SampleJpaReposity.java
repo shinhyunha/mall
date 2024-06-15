@@ -14,8 +14,4 @@ public class SampleJpaReposity {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
-
-    public void save(Sample sample) {
-        em.persist(sample);
-    }
 }

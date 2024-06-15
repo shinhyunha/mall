@@ -19,7 +19,21 @@ public class QSampleTeam extends EntityPathBase<SampleTeam> {
 
     public static final QSampleTeam sampleTeam = new QSampleTeam("sampleTeam");
 
+    public final com.mall.common.entity.QBaseEntity _super = new com.mall.common.entity.QBaseEntity(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
+
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    //inherited
+    public final StringPath lastModifiedBy = _super.lastModifiedBy;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final StringPath teamName = createString("teamName");
 
