@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface SampleRepositoryCustom {
     Sample findByName(String name);
+
+    List<Sample> findAllJoinTeam();
 }

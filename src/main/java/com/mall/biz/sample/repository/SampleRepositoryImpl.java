@@ -24,4 +24,16 @@ public class SampleRepositoryImpl implements SampleRepositoryCustom {
                 .where(sample.name.like('%' + name+ '%'))
                 .fetchOne();
     }
+
+    @Override
+    public List<Sample> findAllJoinTeam() {
+        QSample sample = new QSample("sample");
+
+        return queryFactory
+                .select(sample)
+                .from(sample)
+                .leftJoin(sample.sampleTeam)
+                .orderBy(sample.id.desc())
+                .fetch();
+    }
 }

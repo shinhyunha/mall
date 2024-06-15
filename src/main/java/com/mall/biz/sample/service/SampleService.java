@@ -26,8 +26,7 @@ public class SampleService {
     @Transactional(readOnly = true)
     public List<ResSampleDto> searchSampleAll() {
         // 아이디 sorting 정보 넣기
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        List<Sample> sampleList = sampleRepository.findAll(sort);
+        List<Sample> sampleList = sampleRepository.findAllJoinTeam();
         // entity to dto 하여 정보전달
         List<ResSampleDto> resSampleDtoList = new ArrayList<>();
         for (Sample sample : sampleList) {
