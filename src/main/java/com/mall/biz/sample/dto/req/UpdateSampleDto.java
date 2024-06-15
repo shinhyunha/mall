@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 public class UpdateSampleDto {
     private Long id;
     private String name;
-    private SampleTeam sampleTeam;
+    private Long teamId;
 
     public Sample dtoToSampleEntity() {
-        return (this.sampleTeam == null ? new Sample(this.name, this.id) : new Sample(this.id, this.name, this.sampleTeam));
+        return new Sample(this.name, this.id);
     }
 }

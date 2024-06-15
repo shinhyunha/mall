@@ -36,9 +36,8 @@ public class Sample extends BaseEntity {
         this.sampleTeam = sampleTeam;
     }
 
-    public Sample(long id, String name, SampleTeam sampleTeam) {
-        this.id = id;
-        this.name = name;
+
+    public void setTeam(SampleTeam sampleTeam) {
         this.sampleTeam = sampleTeam;
     }
 

@@ -56,4 +56,10 @@ public class SampleController {
         return new SuccessResponse();
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "sample 삭제", description = "sample을 삭제한다.")
+    public SuccessResponse removeSample(@PathVariable("id") Long id) {
+        sampleService.removeSample(id);
+        return new SuccessResponse();
+    }
 }

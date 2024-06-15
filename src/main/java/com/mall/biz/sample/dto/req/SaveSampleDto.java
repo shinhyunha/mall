@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SaveSampleDto {
     private String name;
-    private SampleTeam sampleTeam;
+    private Long teamId;
 
     public Sample dtoToSampleEntity() {
-        return (this.sampleTeam == null ? new Sample(this.name) : new Sample(this.name, this.sampleTeam));
+        return new Sample(this.name);
     }
 }

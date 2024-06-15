@@ -8,6 +8,7 @@ import com.mall.biz.sample.entity.Sample;
 import com.mall.biz.sample.entity.SampleTeam;
 import com.mall.biz.sample.repository.SampleRepository;
 import com.mall.biz.sample.repository.SampleTeamRepository;
+import com.mall.common.exception.InputCheckException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -38,14 +39,17 @@ public class SampleService {
 
     @Transactional
     public void saveSample(SaveSampleDto saveSampleDto) {
-        // sampleteam을 따로 저장하여 엔티티에 속한 애를 가져온다.
-        if (saveSampleDto.getSampleTeam() != null) {
-            SampleTeam tempSampleTeam = sampleTeamRepository.save(saveSampleDto.getSampleTeam().dtoToSampleTeamEntity());
+        Sample sample = saveSampleDto.dtoToSampleEntity();
+        // sampleteam을 조회하여 팀정보 입력
+        if (saveSampleDto.getTeamId() != null) {
+            SampleTeam sampleTeam = sampleTeamRepository.findById(saveSampleDto.getTeamId()).orElseThrow(() ->
+                    new InputCheckException("Team Id를 확인하세요."));
+
             // 그 속한 녀석을 sample에 넣는다.
-            saveSampleDto.setSampleTeam(tempSampleTeam);
+            sample.setTeam(sampleTeam);
         }
         // sample 저장
-        sampleRepository.save(saveSampleDto.dtoToSampleEntity());
+        sampleRepository.save(sample);
     }
 
     @Transactional(readOnly = true)
@@ -62,8 +66,22 @@ public class SampleService {
 
     @Transactional
     public void updateSample(UpdateSampleDto updateSampleDto) {
-        Sample sample = sampleRepository.findById(updateSampleDto.dtoToSampleEntity().getId()).orElse(null);
-//        Optional<SampleTeam> sampleTeam = sampleTeamRepository.findById(updateSampleDto.getSampleTeam().getId());
+        Sample sample = sampleRepository.findById(updateSampleDto.getId()).orElseThrow(()
+                -> new InputCheckException("Sample id를 확인하세요."));
+        if (updateSampleDto.getTeamId() != null) {
+            SampleTeam sampleTeam = sampleTeamRepository.findById(updateSampleDto.getTeamId()).orElse(null);
+            sample.setTeam(sampleTeam);
+        } else {
+            sample.setTeam(null);
+        }
+        sample.updateBaseEntity();
         sample.updateSample(updateSampleDto.dtoToSampleEntity());
+    }
+
+    @Transactional
+    public void removeSample(Long id) {
+        Sample sample = sampleRepository.findById(id).orElseThrow(()
+                -> new InputCheckException("Sample Id를 확인하세요."));
+        sampleRepository.delete(sample);
     }
 }

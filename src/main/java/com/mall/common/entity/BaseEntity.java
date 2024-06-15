@@ -27,6 +27,11 @@ public class BaseEntity {
     private String createdBy = "Tester";
 
     @LastModifiedBy
-    private String lastModifiedBy = "Modifierd";
+    private String lastModifiedBy = "Modifier";
+
+    public void updateBaseEntity() {
+        this.lastModifiedDate = LocalDateTime.now();
+        this.lastModifiedBy = "lastModifer";
+    }
 }
 
