@@ -1,6 +1,5 @@
 package com.mall.biz.sample.dto.res;
 
-import com.mall.biz.sample.entity.Sample;
 import com.mall.biz.sample.entity.SampleTeam;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @NoArgsConstructor
-public class ReqSampleTeamDto {
+public class ResSampleTeamDto {
     private Long id;
     private String teamName;
     private LocalDateTime createDate;
@@ -19,7 +18,7 @@ public class ReqSampleTeamDto {
     private String createdBy;
     private String lastModifiedBy;
 
-    public ReqSampleTeamDto(Long id, String teamName, LocalDateTime createDate, LocalDateTime lastModifiedDate, String createdBy, String lastModifiedBy) {
+    public ResSampleTeamDto(Long id, String teamName, LocalDateTime createDate, LocalDateTime lastModifiedDate, String createdBy, String lastModifiedBy) {
         this.id = id;
         this.teamName = teamName;
         this.createDate = createDate;
@@ -28,8 +27,8 @@ public class ReqSampleTeamDto {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public static ReqSampleTeamDto entityToDto(SampleTeam sampleTeam) {
-        return ReqSampleTeamDto.builder()
+    public static ResSampleTeamDto entityToDto(SampleTeam sampleTeam) {
+        return ResSampleTeamDto.builder()
                 .id(sampleTeam.getId())
                 .teamName(sampleTeam.getTeamName())
                 .createDate(sampleTeam.getCreateDate())

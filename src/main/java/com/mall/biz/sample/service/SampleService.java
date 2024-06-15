@@ -3,7 +3,7 @@ package com.mall.biz.sample.service;
 import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
-import com.mall.biz.sample.dto.res.ReqSampleDto;
+import com.mall.biz.sample.dto.res.ResSampleDto;
 import com.mall.biz.sample.entity.Sample;
 import com.mall.biz.sample.entity.SampleTeam;
 import com.mall.biz.sample.repository.SampleRepository;
@@ -24,16 +24,16 @@ public class SampleService {
     private final SampleTeamRepository sampleTeamRepository;
 
     @Transactional(readOnly = true)
-    public List<ReqSampleDto> searchSampleAll() {
+    public List<ResSampleDto> searchSampleAll() {
         // 아이디 sorting 정보 넣기
         Sort sort = Sort.by(Sort.Order.desc("id"));
         List<Sample> sampleList = sampleRepository.findAll(sort);
         // entity to dto 하여 정보전달
-        List<ReqSampleDto> reqSampleDtoList = new ArrayList<>();
+        List<ResSampleDto> resSampleDtoList = new ArrayList<>();
         for (Sample sample : sampleList) {
-            reqSampleDtoList.add(ReqSampleDto.entityToDto(sample));
+            resSampleDtoList.add(ResSampleDto.entityToDto(sample));
         }
-        return reqSampleDtoList;
+        return resSampleDtoList;
     }
 
     @Transactional
@@ -52,10 +52,10 @@ public class SampleService {
     }
 
     @Transactional(readOnly = true)
-    public ReqSampleDto searchSampleByName(String name) {
+    public ResSampleDto searchSampleByName(String name) {
         // custom에 작성한고 impl에 구현 = querymethod
         Sample sample = sampleRepository.findByName(name);
-        return (sample != null ? ReqSampleDto.entityToDto(sample) : null);
+        return (sample != null ? ResSampleDto.entityToDto(sample) : null);
     }
 
     @Transactional
