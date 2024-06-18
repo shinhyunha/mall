@@ -1,5 +1,7 @@
 package com.mall.biz.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mall.biz.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -36,4 +38,24 @@ public class ReqSaveMemberDto {
     @NotBlank(message = "우편번호는 {valid.notblank}")
     @Schema(description = "우편번호", type = "int")
     private String zipCode;
+
+    @JsonIgnore
+    private String id;
+
+    public Member dtoToEntity() {
+        return Member.builder()
+                .id(id)
+                .loginId(loginId)
+                .password(password)
+                .name(name)
+                .age(age)
+                .phone(phone.replace("-", ""))
+                .address(address)
+                .zipCode(zipCode)
+                .build();
+    }
+
+    public void registMemberId(String memberId) {
+        this.id = memberId;
+    }
 }
