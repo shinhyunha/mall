@@ -18,3 +18,11 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
+
+# crypto
+crypto:
+  password: ????
+  byte-array: 16
+  secret-key-algorithm: AES
+  transformation: AES/CBC/PKCS5Padding
+  digest-algorithm: SHA-256
