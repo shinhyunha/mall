@@ -1,10 +1,15 @@
 package com.mall.biz.member.service;
 
-import com.mall.biz.member.dto.ReqSaveMemberDto;
+import com.mall.biz.member.dto.req.ReqMemberSearchFilter;
+import com.mall.biz.member.dto.req.ReqSaveMemberDto;
 import com.mall.biz.member.entity.Member;
 import com.mall.biz.member.repository.MemberRepository;
+import com.mall.biz.member.dto.res.ResMemberListDto;
 import com.mall.common.utils.CommonUtils;
+import com.mall.common.utils.ValidUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +41,18 @@ public class MemberService  {
 
         Member member = reqSaveMemberDto.dtoToEntity();
         memberRepository.save(member);
+    }
+
+    public Page<ResMemberListDto> searchMemberList(ReqMemberSearchFilter reqMemberSearchFilter, Pageable pageable) {
+        // 날짜 검증
+        if (!reqMemberSearchFilter.getFromDate().isBlank() && !reqMemberSearchFilter.getToDate().isBlank()) {
+            String fromDate = reqMemberSearchFilter.getFromDate();
+            String toDate = reqMemberSearchFilter.getToDate();
+            ValidUtils.validBetweenDate(fromDate, toDate);
+            reqMemberSearchFilter.setFromDate(fromDate + " 00:00:00");
+            reqMemberSearchFilter.setToDate(toDate + " 23:59:59");
+        }
+
+        return memberRepository.searchMemberList(reqMemberSearchFilter, pageable);
     }
 }
