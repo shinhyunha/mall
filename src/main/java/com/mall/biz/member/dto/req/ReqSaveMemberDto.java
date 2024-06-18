@@ -1,15 +1,16 @@
-package com.mall.biz.member.dto;
+package com.mall.biz.member.dto.req;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.biz.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Data
 @Getter
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ReqSaveMemberDto {
     @NotBlank(message = "로그인 아이디는 {valid.notblank}")
     @Schema(description = "로그인 아이디", type = "String")
