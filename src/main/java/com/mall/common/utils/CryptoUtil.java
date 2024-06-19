@@ -1,8 +1,6 @@
 package com.mall.common.utils;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -13,31 +11,31 @@ import java.security.MessageDigest;
 import java.util.Base64;
 
 @Component
-@ConfigurationProperties(prefix = "crypto")
 public class CryptoUtil {
+    private static String password;
+    private static int byteArray;
+    private static String secretKeyAlgorithm;
+    private static String transformation;
+    private static String digestAlgorithm;
 
     @Value("${crypto.password}")
-    private String password;
+    public void setPassword(String value) { password = value; }
 
     @Value("${crypto.byte-array}")
-    private int byteArray;
+    public void setByteArray(int value) { byteArray = value; }
 
     @Value("${crypto.secret-key-algorithm}")
-    private String secretKeyAlgorithm;
+    public void setSecretKeyAlgorithm(String value) { secretKeyAlgorithm = value; }
 
     @Value("${crypto.transformation}")
-    private String transformation;
+    public void setTransformation(String value) { transformation = value; }
 
     @Value("${crypto.digest-algorithm}")
-    private String digestAlgorithm;
-
-    @PostConstruct
-    public void init() {
-        // 초기화 코드 필요시 여기에 작성
-    }
+    public void setDigestAlgorithm(String value) { digestAlgorithm = value; }
+//    private String digestAlgorithm;
 
     // 암호화 메소드
-    public String encryptText(String value) throws Exception {
+    public static String encryptText(String value) throws Exception {
         Cipher cipherEnc = Cipher.getInstance(transformation);
         SecretKeySpec keySpec = new SecretKeySpec(hashString(password), secretKeyAlgorithm);
         byte[] iv = new byte[byteArray];
@@ -47,7 +45,7 @@ public class CryptoUtil {
     }
 
     // 복호화 메소드
-    public String decryptText(String encryptedText) throws Exception {
+    public static String decryptText(String encryptedText) throws Exception {
         Cipher cipherDec = Cipher.getInstance(transformation);
         SecretKeySpec keySpec = new SecretKeySpec(hashString(password), secretKeyAlgorithm);
         byte[] iv = new byte[byteArray];
@@ -57,7 +55,7 @@ public class CryptoUtil {
     }
 
     // 해시 함수
-    public byte[] hashString(String msg) throws Exception {
+    public static byte[] hashString(String msg) throws Exception {
         try {
             MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
             md.update(msg.getBytes());
@@ -68,7 +66,7 @@ public class CryptoUtil {
     }
 
     // 텍스트 다이제스트 함수
-    public String digestText(String input) throws Exception {
+    public static String digestText(String input) throws Exception {
         byte[] bytes = input.getBytes();
         MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
         byte[] digest = md.digest(bytes);
@@ -81,4 +79,3 @@ public class CryptoUtil {
         return result.toString();
     }
 }
-
