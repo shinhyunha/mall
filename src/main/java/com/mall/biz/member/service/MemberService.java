@@ -22,7 +22,7 @@ public class MemberService  {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void saveMember(ReqSaveMemberDto reqSaveMemberDto) {
+    public void saveMember(ReqSaveMemberDto reqSaveMemberDto) throws Exception {
         while (true) {
             // 회원 id 생성
             LocalDate now = LocalDate.now();

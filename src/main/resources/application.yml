@@ -21,8 +21,8 @@ logging.level:
 
 # crypto
 crypto:
-  password: ????
+  password: "????"
   byte-array: 16
-  secret-key-algorithm: AES
-  transformation: AES/CBC/PKCS5Padding
+  secret-key-algorithm: "AES"
+  transformation: "AES/CBC/PKCS5Padding"
   digest-algorithm: SHA-256

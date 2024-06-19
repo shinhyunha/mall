@@ -3,10 +3,12 @@ package com.mall.biz.member.dto.req;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.biz.member.entity.Member;
+import com.mall.common.utils.CryptoUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @Getter
@@ -43,7 +45,8 @@ public class ReqSaveMemberDto {
     @JsonIgnore
     private String id;
 
-    public Member dtoToEntity() {
+    public Member dtoToEntity() throws Exception {
+        this.password = CryptoUtil.digestText(password);
         return Member.builder()
                 .id(id)
                 .loginId(loginId)

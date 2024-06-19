@@ -30,7 +30,7 @@ public class MemberController {
 
     @PostMapping("")
     @Operation(summary = "회원 등록", description = "회원을 등록한다.")
-    public SuccessResponse saveMember(@RequestBody @Valid ReqSaveMemberDto reqSaveMemberDto) {
+    public SuccessResponse saveMember(@RequestBody @Valid ReqSaveMemberDto reqSaveMemberDto) throws Exception {
         memberService.saveMember(reqSaveMemberDto);
         return new SuccessResponse();
     }
