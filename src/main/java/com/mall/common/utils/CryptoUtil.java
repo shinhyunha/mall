@@ -32,7 +32,6 @@ public class CryptoUtil {
 
     @Value("${crypto.digest-algorithm}")
     public void setDigestAlgorithm(String value) { digestAlgorithm = value; }
-//    private String digestAlgorithm;
 
     // 암호화 메소드
     public static String encryptText(String value) throws Exception {
