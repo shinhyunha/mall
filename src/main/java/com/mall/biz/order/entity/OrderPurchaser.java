@@ -13,7 +13,6 @@ import static jakarta.persistence.FetchType.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Table(name = "order_purchaser")
 public class OrderPurchaser extends BaseDateEntity {
     @Id
@@ -32,15 +31,12 @@ public class OrderPurchaser extends BaseDateEntity {
     private String name;
     private String email;
     private String phone;
-    private String address;
 
-    public OrderPurchaser(Long id, Order order, Member member, String name, String email, String phone, String address) {
-        this.id = id;
+    public OrderPurchaser(Order order, Member member, String name, String email, String phone) {
         this.order = order;
         this.member = member;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.address = address;
     }
 }
