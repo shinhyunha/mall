@@ -2,9 +2,12 @@ package com.mall.biz.member.service;
 
 import com.mall.biz.member.dto.req.ReqMemberSearchFilter;
 import com.mall.biz.member.dto.req.ReqSaveMemberDto;
+import com.mall.biz.member.dto.req.ReqUpdateMemberDto;
+import com.mall.biz.member.dto.res.ResMemberDto;
 import com.mall.biz.member.entity.Member;
 import com.mall.biz.member.repository.MemberRepository;
 import com.mall.biz.member.dto.res.ResMemberListDto;
+import com.mall.common.exception.InputCheckException;
 import com.mall.common.utils.CommonUtils;
 import com.mall.common.utils.ValidUtils;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +46,13 @@ public class MemberService  {
         memberRepository.save(member);
     }
 
+    @Transactional(readOnly = true)
     public Page<ResMemberListDto> searchMemberList(ReqMemberSearchFilter reqMemberSearchFilter, Pageable pageable) {
         // 날짜 검증
-        if (!reqMemberSearchFilter.getFromDate().isBlank() && !reqMemberSearchFilter.getToDate().isBlank()) {
+        if (!(reqMemberSearchFilter.getFromDate() == null) &&
+            !reqMemberSearchFilter.getFromDate().isBlank() &&
+            !(reqMemberSearchFilter.getToDate() == null) &&
+            !reqMemberSearchFilter.getToDate().isBlank()) {
             String fromDate = reqMemberSearchFilter.getFromDate();
             String toDate = reqMemberSearchFilter.getToDate();
             ValidUtils.validBetweenDate(fromDate, toDate);
@@ -54,5 +61,29 @@ public class MemberService  {
         }
 
         return memberRepository.searchMemberList(reqMemberSearchFilter, pageable);
+    }
+
+    @Transactional
+    public void updateMember(ReqUpdateMemberDto reqUpdateMemberDto) throws Exception {
+        // 회원번호 validation
+        Member findMember = memberRepository.findById(reqUpdateMemberDto.getId()).orElseThrow(()
+                -> new InputCheckException("회원번호를 확인하세요.")
+        );
+
+        // 로그인 아이디 및 비빌번호 확인
+        if (!findMember.validtionLoginIdPassword(reqUpdateMemberDto.getLoginId(), reqUpdateMemberDto.getPassword())) {
+            throw new InputCheckException("로그인 아이디 또는 비밀번호를 확인하세요.");
+        }
+
+        // 회원정보 Update
+        findMember.updateMember(reqUpdateMemberDto);
+    }
+
+    @Transactional(readOnly = true)
+    public ResMemberDto findMember(String memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()
+                -> new InputCheckException("회원번호를 확인하세요."));
+
+        return  new ResMemberDto(member);
     }
 }

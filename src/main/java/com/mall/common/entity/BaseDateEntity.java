@@ -22,6 +22,7 @@ public class BaseDateEntity {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
+    // 수정시 업데이트 시간 반영
     public void updateBaseEntity() {
         this.lastModifiedDate = LocalDateTime.now();
     }

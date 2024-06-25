@@ -4,8 +4,6 @@ import com.mall.biz.member.dto.req.ReqMemberSearchFilter;
 import com.mall.biz.member.dto.res.QResMemberListDto;
 import com.mall.biz.member.dto.res.ResMemberListDto;
 import com.mall.biz.member.entity.Member;
-import com.mall.biz.member.entity.QMember;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -79,8 +77,10 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     private BooleanExpression betweenDate(ReqMemberSearchFilter reqMemberSearchFilter) {
-        if (!reqMemberSearchFilter.getFromDate().isBlank()
-                && !reqMemberSearchFilter.getToDate().isBlank()) {
+        if (!(reqMemberSearchFilter.getFromDate() == null) &&
+                !reqMemberSearchFilter.getFromDate().isBlank() &&
+                !(reqMemberSearchFilter.getToDate() == null) &&
+                !reqMemberSearchFilter.getToDate().isBlank()) {
             String tempFromDate = reqMemberSearchFilter.getFromDate().replace(" ", "T");
             LocalDateTime fromDate = LocalDateTime.parse(tempFromDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             String tempToDate = reqMemberSearchFilter.getToDate().replace(" ", "T");
