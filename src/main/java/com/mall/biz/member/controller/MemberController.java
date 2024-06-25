@@ -2,6 +2,8 @@ package com.mall.biz.member.controller;
 
 import com.mall.biz.member.dto.req.ReqMemberSearchFilter;
 import com.mall.biz.member.dto.req.ReqSaveMemberDto;
+import com.mall.biz.member.dto.req.ReqUpdateMemberDto;
+import com.mall.biz.member.dto.res.ResMemberDto;
 import com.mall.biz.member.service.MemberService;
 import com.mall.biz.member.dto.res.ResMemberListDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
@@ -46,7 +48,7 @@ public class MemberController {
     })
     @Operation(summary = "회원 목록 조회", description = "회원 목록을 전체 조회한다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResSampleDto.class)))
+            @ApiResponse(responseCode = "200", description = "회원 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResMemberListDto.class)))
     })
     public SuccessResponse searchMemberList(
             @Parameter(hidden = true) @Valid ReqMemberSearchFilter reqMemberSearchFilter,
@@ -54,5 +56,22 @@ public class MemberController {
     ) {
         Page<ResMemberListDto> result = memberService.searchMemberList(reqMemberSearchFilter, pageable);
         return new SuccessResponse(result);
+    }
+
+    @GetMapping("/{memberId}")
+    @Operation(summary = "회원 단건 조회", description = "회원 단건을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 단건 조회 성공", content = @Content(schema = @Schema(implementation = ResMemberDto.class)))
+    })
+    public SuccessResponse searchMemberList(@PathVariable(name = "memberId") String memberId) {
+        ResMemberDto result = memberService.findMember(memberId);
+        return new SuccessResponse(result);
+    }
+
+    @PutMapping("")
+    @Operation(summary = "회원정보 수정", description = "회원정보를 수정한다.")
+    public SuccessResponse updateMember(@RequestBody ReqUpdateMemberDto reqUpdateMemberDto) throws Exception {
+        memberService.updateMember(reqUpdateMemberDto);
+        return new SuccessResponse();
     }
 }

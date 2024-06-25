@@ -1,5 +1,6 @@
 package com.mall.biz.member.entity;
 
+import com.mall.biz.member.dto.req.ReqUpdateMemberDto;
 import com.mall.common.entity.BaseDateEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -33,5 +34,20 @@ public class Member extends BaseDateEntity {
         this.phone = phone;
         this.address = address;
         this.zipCode = zipCode;
+    }
+
+    // 로그인 아이디 및 비밀번호 체크
+    public boolean validtionLoginIdPassword(String loginId, String password) {
+        return this.loginId.equals(loginId) && this.password.equals(password);
+    }
+
+    // 회원정보 업데이트
+    public void updateMember(ReqUpdateMemberDto reqUpdateMemberDto) {
+        this.name = reqUpdateMemberDto.getName();
+        this.age = reqUpdateMemberDto.getAge();
+        this.phone = reqUpdateMemberDto.getPhone();
+        this.address = reqUpdateMemberDto.getAddress();
+        this.zipCode = reqUpdateMemberDto.getZipCode();
+        this.updateBaseEntity();
     }
 }
