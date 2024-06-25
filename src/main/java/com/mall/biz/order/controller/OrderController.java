@@ -1,7 +1,7 @@
 package com.mall.biz.order.controller;
 
-import com.mall.biz.item.dto.req.ReqSaveItemDto;
 import com.mall.biz.order.service.OrderService;
+import com.mall.biz.order.dto.req.ReqSaveOrderDto;
 import com.mall.common.model.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,8 +21,8 @@ public class OrderController {
 
     @PostMapping("")
     @Operation(summary = "주문 등록", description = "주문을 등록한다.")
-    public SuccessResponse saveItem(@RequestBody @Valid ReqSaveItemDto reqSaveItemDto) {
-//        itemService.saveItem(reqSaveItemDto);
-        return new SuccessResponse();
+    public SuccessResponse saveOrder(@RequestBody @Valid ReqSaveOrderDto reqSaveOrderDto) {
+        Long orderNo = orderService.saveOrder(reqSaveOrderDto);
+        return new SuccessResponse(orderNo);
     }
 }

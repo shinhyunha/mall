@@ -24,8 +24,6 @@ public class QOrderPurchaser extends EntityPathBase<OrderPurchaser> {
 
     public final com.mall.common.entity.QBaseDateEntity _super = new com.mall.common.entity.QBaseDateEntity(this);
 
-    public final StringPath address = createString("address");
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 

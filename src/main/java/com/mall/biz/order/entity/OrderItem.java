@@ -7,12 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Table(name = "order_item")
 public class OrderItem {
     @Id
@@ -30,13 +31,14 @@ public class OrderItem {
 
     private int itemPrice;
     private int orderQuantity;
-    private final int totalPrice = (itemPrice * orderQuantity);
+    private int totalPrice;
+    private final LocalDateTime createDate = LocalDateTime.now();
 
-    public OrderItem(Long id, Order order, Item item, int itemPrice, int orderQuantity) {
-        this.id = id;
+    public OrderItem(Order order, Item item, int itemPrice, int orderQuantity) {
         this.order = order;
         this.item = item;
         this.itemPrice = itemPrice;
         this.orderQuantity = orderQuantity;
+        this.totalPrice = (itemPrice * orderQuantity);
     }
 }

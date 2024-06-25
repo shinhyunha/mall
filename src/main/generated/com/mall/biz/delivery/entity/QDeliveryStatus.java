@@ -48,7 +48,7 @@ public class QDeliveryStatus extends EntityPathBase<DeliveryStatus> {
 
     public QDeliveryStatus(Class<? extends DeliveryStatus> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.delivery = inits.isInitialized("delivery") ? new QDelivery(forProperty("delivery")) : null;
+        this.delivery = inits.isInitialized("delivery") ? new QDelivery(forProperty("delivery"), inits.get("delivery")) : null;
     }
 
 }

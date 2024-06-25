@@ -47,4 +47,23 @@ public class Item extends BaseEntity {
         this.genderCode = reqUpdateItemDto.getGenderCode();
         this.updateBaseEntity();
     }
+
+    // 상품 가격 확인
+    public boolean checkItemPrice(int price) {
+        return !(this.price == price);
+    }
+
+    // 상품 재고 확인
+    public boolean checkItemQuantity(int quantity) {
+        return !(this.quantity - quantity >= 0);
+    }
+
+    // 상품 총합 확인
+    public int calculateTotalPrice(int quantity) {
+        return this.price * quantity;
+    }
+
+    public void reduceQuantity(int orderQuantity) {
+        this.quantity -= orderQuantity;
+    }
 }

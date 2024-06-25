@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QDelivery extends EntityPathBase<Delivery> {
 
     private static final long serialVersionUID = 296174765L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QDelivery delivery = new QDelivery("delivery");
 
@@ -33,6 +36,8 @@ public class QDelivery extends EntityPathBase<Delivery> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
+    public final com.mall.biz.order.entity.QOrder order;
+
     public final StringPath phone = createString("phone");
 
     public final StringPath receiverName = createString("receiverName");
@@ -40,15 +45,24 @@ public class QDelivery extends EntityPathBase<Delivery> {
     public final StringPath zipCode = createString("zipCode");
 
     public QDelivery(String variable) {
-        super(Delivery.class, forVariable(variable));
+        this(Delivery.class, forVariable(variable), INITS);
     }
 
     public QDelivery(Path<? extends Delivery> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QDelivery(PathMetadata metadata) {
-        super(Delivery.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QDelivery(PathMetadata metadata, PathInits inits) {
+        this(Delivery.class, metadata, inits);
+    }
+
+    public QDelivery(Class<? extends Delivery> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.order = inits.isInitialized("order") ? new com.mall.biz.order.entity.QOrder(forProperty("order")) : null;
     }
 
 }

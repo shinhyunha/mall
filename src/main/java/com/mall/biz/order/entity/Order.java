@@ -1,5 +1,6 @@
 package com.mall.biz.order.entity;
 
+import com.mall.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@Table(name = "order")
-public class Order {
+@Table(name = "orders")
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_no")
@@ -19,11 +19,16 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderCode orderCode;
+
     private int totalPrice;
 
-    public Order(Long id, OrderCode orderCode, int totalPrice) {
-        this.id = id;
+    public Order(OrderCode orderCode, int totalPrice) {
         this.orderCode = orderCode;
         this.totalPrice = totalPrice;
+    }
+
+    public void changeOrderStatus(OrderCode orderCode) {
+        this.orderCode = orderCode;
+        this.updateBaseEntity();
     }
 }

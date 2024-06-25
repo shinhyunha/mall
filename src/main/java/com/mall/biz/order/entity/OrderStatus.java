@@ -13,7 +13,6 @@ import static jakarta.persistence.FetchType.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Table(name = "order_status")
 public class OrderStatus {
     @Id
@@ -30,8 +29,7 @@ public class OrderStatus {
 
     private final LocalDateTime createDate = LocalDateTime.now();
 
-    public OrderStatus(Long id, Order order, OrderCode orderCode) {
-        this.id = id;
+    public OrderStatus(Order order, OrderCode orderCode) {
         this.order = order;
         this.orderCode = orderCode;
     }

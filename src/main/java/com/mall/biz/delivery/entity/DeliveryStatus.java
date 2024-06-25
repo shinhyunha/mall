@@ -28,8 +28,7 @@ public class DeliveryStatus {
     private DeliveryCode deliveryCode;
     private final LocalDateTime createDate = LocalDateTime.now();
 
-    public DeliveryStatus(Long id, Delivery delivery, DeliveryCode deliveryCode) {
-        this.id = id;
+    public DeliveryStatus(Delivery delivery, DeliveryCode deliveryCode) {
         this.delivery = delivery;
         this.deliveryCode = deliveryCode;
     }
