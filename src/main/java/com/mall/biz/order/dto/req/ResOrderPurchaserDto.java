@@ -12,7 +12,7 @@ import lombok.Getter;
 @Data
 @Getter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class OrderPurchaserDto {
+public class ResOrderPurchaserDto {
     @Schema(description = "주문 번호", type = "Long")
     private Long orderNo;
 

@@ -1,6 +1,7 @@
 package com.mall.biz.item.service;
 
 import com.mall.biz.common.service.CommonService;
+import com.mall.biz.item.dto.req.ReqItemQuantityDto;
 import com.mall.biz.item.dto.req.ReqItemSearchFilter;
 import com.mall.biz.item.dto.req.ReqSaveItemDto;
 import com.mall.biz.item.dto.req.ReqUpdateItemDto;
@@ -76,5 +77,15 @@ public class ItemService {
 
         // 상품 업데이트
         findItem.updateItem(reqUpdateItemDto);
+    }
+
+    @Transactional
+    public void updateItemQuantity(ReqItemQuantityDto reqItemQuantityDto) {
+        // 상품번호 체크
+        Item item = itemRepository.findById(reqItemQuantityDto.getId()).orElseThrow(()
+                -> new InputCheckException("상품번호를 확인하세요."));
+
+        // 재고추가
+        item.addQuantity(reqItemQuantityDto.getQuantity());
     }
 }
