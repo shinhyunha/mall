@@ -5,13 +5,7 @@ import com.mall.biz.item.dto.req.ReqSaveItemDto;
 import com.mall.biz.item.dto.req.ReqUpdateItemDto;
 import com.mall.biz.item.dto.res.ResItemListDto;
 import com.mall.biz.item.service.ItemService;
-import com.mall.biz.member.dto.req.ReqMemberSearchFilter;
-import com.mall.biz.member.dto.req.ReqSaveMemberDto;
-import com.mall.biz.member.dto.res.ResMemberDto;
-import com.mall.biz.member.dto.res.ResMemberListDto;
-import com.mall.biz.member.service.MemberService;
-import com.mall.biz.sample.dto.res.ResItemDto;
-import com.mall.biz.sample.dto.res.ResSampleDto;
+import com.mall.biz.item.dto.res.ResItemDto;
 import com.mall.common.model.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -69,7 +63,7 @@ public class ItemController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "상품 단건 조회 성공", content = @Content(schema = @Schema(implementation = ResItemDto.class)))
     })
-    public SuccessResponse searchMemberList(@PathVariable(name = "itemId") Long itemId) {
+    public SuccessResponse searchItem(@PathVariable(name = "itemId") Long itemId) {
         ResItemDto result = itemService.findItem(itemId);
         return new SuccessResponse(result);
     }

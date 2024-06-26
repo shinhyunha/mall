@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @Value("local")
+    @Value("prd")
     private String activeProfile;
 
     // 사용자 validation 에 대한 예외처리 : Pathvariable 대응
@@ -55,9 +55,7 @@ public class GlobalExceptionHandler {
         FailResponse response = null;
 
         switch (e.getClass().getName()) {
-            case "com.whataulsan.common.exception.AuthException":
-                break;
-            case "com.whataulsan.common.exception.InputCheckException":
+            case "com.mall.common.exception.InputCheckException":
                 response = new FailResponse(Const.ResponseCode.INPUT_CHECK_ERROR.getCode(), e.getMessage());
                 break;
             default:

@@ -77,10 +77,8 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     private BooleanExpression betweenDate(ReqMemberSearchFilter reqMemberSearchFilter) {
-        if (!(reqMemberSearchFilter.getFromDate() == null) &&
-                !reqMemberSearchFilter.getFromDate().isBlank() &&
-                !(reqMemberSearchFilter.getToDate() == null) &&
-                !reqMemberSearchFilter.getToDate().isBlank()) {
+        if (!(reqMemberSearchFilter.getFromDate() == null) && !reqMemberSearchFilter.getFromDate().isBlank() &&
+                !(reqMemberSearchFilter.getToDate() == null) && !reqMemberSearchFilter.getToDate().isBlank()) {
             String tempFromDate = reqMemberSearchFilter.getFromDate().replace(" ", "T");
             LocalDateTime fromDate = LocalDateTime.parse(tempFromDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             String tempToDate = reqMemberSearchFilter.getToDate().replace(" ", "T");

@@ -13,8 +13,8 @@ public class QResItemListDto extends ConstructorExpression<ResItemListDto> {
 
     private static final long serialVersionUID = -1331767298L;
 
-    public QResItemListDto(com.querydsl.core.types.Expression<Long> itemId, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<Integer> price, com.querydsl.core.types.Expression<Integer> quantity, com.querydsl.core.types.Expression<com.mall.biz.item.entity.CategoryCode> categoryCode, com.querydsl.core.types.Expression<com.mall.biz.item.entity.GenderCode> genderCode) {
-        super(ResItemListDto.class, new Class<?>[]{long.class, String.class, int.class, int.class, com.mall.biz.item.entity.CategoryCode.class, com.mall.biz.item.entity.GenderCode.class}, itemId, name, price, quantity, categoryCode, genderCode);
+    public QResItemListDto(com.querydsl.core.types.Expression<Long> itemNo, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<Integer> price, com.querydsl.core.types.Expression<Integer> quantity, com.querydsl.core.types.Expression<com.mall.biz.item.entity.CategoryCode> categoryCode, com.querydsl.core.types.Expression<com.mall.biz.item.entity.GenderCode> genderCode) {
+        super(ResItemListDto.class, new Class<?>[]{long.class, String.class, int.class, int.class, com.mall.biz.item.entity.CategoryCode.class, com.mall.biz.item.entity.GenderCode.class}, itemNo, name, price, quantity, categoryCode, genderCode);
     }
 
 }

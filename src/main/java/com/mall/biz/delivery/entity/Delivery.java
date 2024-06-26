@@ -1,5 +1,6 @@
 package com.mall.biz.delivery.entity;
 
+import com.mall.biz.delivery.dto.req.ReqUpdateDeliveryDto;
 import com.mall.biz.order.entity.Order;
 import com.mall.common.entity.BaseDateEntity;
 import jakarta.persistence.*;
@@ -39,5 +40,18 @@ public class Delivery extends BaseDateEntity {
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
         this.phone = phone.replace("-", "");
+    }
+
+    public void updateDeliveryStatus(DeliveryCode deliveryCode) {
+        this.deliveryCode = deliveryCode;
+        this.updateBaseEntity();
+    }
+
+    public void updateDeliveryInformation(ReqUpdateDeliveryDto reqUpdateDeliveryDto) {
+        this.receiverName = reqUpdateDeliveryDto.getReceiverName();
+        this.deliveryAddress = reqUpdateDeliveryDto.getDeliveryAddress();
+        this.zipCode = reqUpdateDeliveryDto.getZipCode();
+        this.phone = reqUpdateDeliveryDto.getPhone().replace("-", "");
+        this.updateBaseEntity();
     }
 }

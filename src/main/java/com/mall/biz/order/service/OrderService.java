@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,6 +49,7 @@ public class OrderService {
         // 주문 상품 확인
         if (reqSaveOrderDto.getOrderItemDtoList() != null) {
             List<OrderItemDto> orderItemDtoList = reqSaveOrderDto.getOrderItemDtoList();
+            int count = 1;
             for (OrderItemDto orderItemDto : orderItemDtoList) {
                 // 상품 아이디 확인
                 Item item = itemRepository.findById(orderItemDto.getItemNo()).orElseThrow(()
@@ -70,7 +70,7 @@ public class OrderService {
                 totalPrice += item.calculateTotalPrice(orderItemDto.getOrderQuantity());
 
                 // OrderItemDto 저장
-                OrderItem orderItem = orderItemDto.dtoToEntity(order, item);
+                OrderItem orderItem = orderItemDto.dtoToEntity(order, item, count++);
                 orderItemRepository.save(orderItem);
             }
         }
@@ -92,6 +92,5 @@ public class OrderService {
         orderStatusRepository.save(orderStatuscomplete);
 
         return order.getId();
-
     }
 }

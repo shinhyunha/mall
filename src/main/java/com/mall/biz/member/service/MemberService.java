@@ -49,10 +49,8 @@ public class MemberService  {
     @Transactional(readOnly = true)
     public Page<ResMemberListDto> searchMemberList(ReqMemberSearchFilter reqMemberSearchFilter, Pageable pageable) {
         // 날짜 검증
-        if (!(reqMemberSearchFilter.getFromDate() == null) &&
-            !reqMemberSearchFilter.getFromDate().isBlank() &&
-            !(reqMemberSearchFilter.getToDate() == null) &&
-            !reqMemberSearchFilter.getToDate().isBlank()) {
+        if (!(reqMemberSearchFilter.getFromDate() == null) && !reqMemberSearchFilter.getFromDate().isBlank() &&
+            !(reqMemberSearchFilter.getToDate() == null) && !reqMemberSearchFilter.getToDate().isBlank()) {
             String fromDate = reqMemberSearchFilter.getFromDate();
             String toDate = reqMemberSearchFilter.getToDate();
             ValidUtils.validBetweenDate(fromDate, toDate);

@@ -32,13 +32,15 @@ public class OrderItem {
     private int itemPrice;
     private int orderQuantity;
     private int totalPrice;
+    private int sequence;
     private final LocalDateTime createDate = LocalDateTime.now();
 
-    public OrderItem(Order order, Item item, int itemPrice, int orderQuantity) {
+    public OrderItem(Order order, Item item, int itemPrice, int orderQuantity, int sequence) {
         this.order = order;
         this.item = item;
         this.itemPrice = itemPrice;
         this.orderQuantity = orderQuantity;
         this.totalPrice = (itemPrice * orderQuantity);
+        this.sequence = sequence;
     }
 }

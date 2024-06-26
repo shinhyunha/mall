@@ -7,8 +7,7 @@ import com.mall.biz.item.dto.req.ReqUpdateItemDto;
 import com.mall.biz.item.dto.res.ResItemListDto;
 import com.mall.biz.item.entity.Item;
 import com.mall.biz.item.repository.ItemRepository;
-import com.mall.biz.common.repository.GroupCodeDetailRepository;
-import com.mall.biz.sample.dto.res.ResItemDto;
+import com.mall.biz.item.dto.res.ResItemDto;
 import com.mall.common.exception.InputCheckException;
 import com.mall.common.utils.ValidUtils;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +31,8 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<ResItemListDto> searchItemList(ReqItemSearchFilter reqItemSearchFilter, Pageable pageable) {
         // 날짜 검증
-        if (!(reqItemSearchFilter.getFromDate() == null) &&
-                !reqItemSearchFilter.getFromDate().isBlank() &&
-                !(reqItemSearchFilter.getToDate() == null) &&
-                !reqItemSearchFilter.getToDate().isBlank()) {
+        if (!(reqItemSearchFilter.getFromDate() == null) && !reqItemSearchFilter.getFromDate().isBlank() &&
+                !(reqItemSearchFilter.getToDate() == null) && !reqItemSearchFilter.getToDate().isBlank()) {
             String fromDate = reqItemSearchFilter.getFromDate();
             String toDate = reqItemSearchFilter.getToDate();
             ValidUtils.validBetweenDate(fromDate, toDate);
