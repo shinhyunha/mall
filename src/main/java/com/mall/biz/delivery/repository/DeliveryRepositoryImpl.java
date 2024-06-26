@@ -22,7 +22,6 @@ import java.util.List;
 
 import static com.mall.biz.delivery.entity.QDelivery.*;
 import static com.mall.biz.item.entity.QItem.*;
-import static com.mall.biz.member.entity.QMember.member;
 import static com.mall.biz.order.entity.QOrder.*;
 import static com.mall.biz.order.entity.QOrderItem.*;
 import static org.springframework.util.StringUtils.hasText;
@@ -82,6 +81,7 @@ public class DeliveryRepositoryImpl implements DeliveryRepositoryCustom {
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(delivery.id.desc())
                 .fetch();
 
         JPAQuery<Delivery> countQuery = queryFactory
