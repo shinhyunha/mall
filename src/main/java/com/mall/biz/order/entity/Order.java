@@ -1,6 +1,7 @@
 package com.mall.biz.order.entity;
 
 import com.mall.common.entity.BaseEntity;
+import com.mall.common.exception.InputCheckException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,5 +31,9 @@ public class Order extends BaseEntity {
     public void changeOrderStatus(OrderCode orderCode) {
         this.orderCode = orderCode;
         this.updateBaseEntity();
+    }
+
+    public void checkOrderStatusComplete() {
+        if (!this.orderCode.equals(OrderCode.COM)) throw new InputCheckException("주문완료 상태가 아닙니다.");
     }
 }

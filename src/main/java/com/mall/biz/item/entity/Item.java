@@ -63,7 +63,15 @@ public class Item extends BaseEntity {
         return this.price * quantity;
     }
 
+    // 상품 주문시 재고 감소
     public void reduceQuantity(int orderQuantity) {
         this.quantity -= orderQuantity;
+        this.updateBaseEntity();
+    }
+
+    // 상품 재고 추가
+    public void addQuantity(int addQuantity) {
+        this.quantity += addQuantity;
+        this.updateBaseEntity();
     }
 }

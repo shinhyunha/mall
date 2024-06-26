@@ -13,8 +13,8 @@ public class QResOrderItemDto extends ConstructorExpression<ResOrderItemDto> {
 
     private static final long serialVersionUID = -1790261031L;
 
-    public QResOrderItemDto(com.querydsl.core.types.Expression<Long> orderItemNo, com.querydsl.core.types.Expression<Long> orderNo, com.querydsl.core.types.Expression<Long> itemNo, com.querydsl.core.types.Expression<Integer> itemPrice, com.querydsl.core.types.Expression<Integer> orderQuantity, com.querydsl.core.types.Expression<Integer> totalPrice, com.querydsl.core.types.Expression<Integer> sequence) {
-        super(ResOrderItemDto.class, new Class<?>[]{long.class, long.class, long.class, int.class, int.class, int.class, int.class}, orderItemNo, orderNo, itemNo, itemPrice, orderQuantity, totalPrice, sequence);
+    public QResOrderItemDto(com.querydsl.core.types.Expression<Long> orderItemNo, com.querydsl.core.types.Expression<Long> orderNo, com.querydsl.core.types.Expression<Long> itemNo, com.querydsl.core.types.Expression<String> itemName, com.querydsl.core.types.Expression<Integer> itemPrice, com.querydsl.core.types.Expression<Integer> orderQuantity, com.querydsl.core.types.Expression<Integer> totalPrice, com.querydsl.core.types.Expression<Integer> sequence) {
+        super(ResOrderItemDto.class, new Class<?>[]{long.class, long.class, long.class, String.class, int.class, int.class, int.class, int.class}, orderItemNo, orderNo, itemNo, itemName, itemPrice, orderQuantity, totalPrice, sequence);
     }
 
 }

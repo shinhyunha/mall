@@ -6,5 +6,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DeliveryStatusRepository extends JpaRepository<DeliveryStatus, Long>, QuerydslPredicateExecutor<DeliveryStatus> {
+public interface DeliveryStatusRepository extends JpaRepository<DeliveryStatus, Long>, DeliveryStatusRepositoryCustom, QuerydslPredicateExecutor<DeliveryStatus> {
 }

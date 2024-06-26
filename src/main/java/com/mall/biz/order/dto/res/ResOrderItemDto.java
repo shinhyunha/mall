@@ -15,6 +15,9 @@ public class ResOrderItemDto {
     @Schema(description = "상품 번호")
     private Long itemNo;
 
+    @Schema(description = "상품이름")
+    private String itemName;
+
     @Schema(description = "상품 건별 가격")
     private int itemPrice;
 
@@ -28,11 +31,11 @@ public class ResOrderItemDto {
     private int sequence;
 
     @QueryProjection
-
-    public ResOrderItemDto(Long orderItemNo, Long orderNo, Long itemNo, int itemPrice, int orderQuantity, int totalPrice, int sequence) {
+    public ResOrderItemDto(Long orderItemNo, Long orderNo, Long itemNo, String itemName, int itemPrice, int orderQuantity, int totalPrice, int sequence) {
         this.orderItemNo = orderItemNo;
         this.orderNo = orderNo;
         this.itemNo = itemNo;
+        this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.orderQuantity = orderQuantity;
         this.totalPrice = totalPrice;

@@ -1,14 +1,16 @@
 package com.mall.biz.order.service;
 
 import com.mall.biz.common.repository.GroupCodeDetailRepository;
+import com.mall.biz.delivery.service.DeliveryService;
 import com.mall.biz.item.entity.Item;
 import com.mall.biz.item.repository.ItemRepository;
-import com.mall.biz.item.service.ItemService;
 import com.mall.biz.member.entity.Member;
 import com.mall.biz.member.repository.MemberRepository;
 import com.mall.biz.order.dto.OrderItemDto;
-import com.mall.biz.order.dto.req.OrderPurchaserDto;
+import com.mall.biz.order.dto.OrderStatusDto;
+import com.mall.biz.order.dto.req.ResOrderPurchaserDto;
 import com.mall.biz.order.dto.req.ReqSaveOrderDto;
+import com.mall.biz.order.dto.res.ResOrderDto;
 import com.mall.biz.order.entity.*;
 import com.mall.biz.order.repository.OrderItemRepository;
 import com.mall.biz.order.repository.OrderPurchaserRepository;
@@ -28,6 +30,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderPurchaserRepository orderPurchaserRepository;
     private final OrderStatusRepository orderStatusRepository;
+    private final DeliveryService deliveryService;
 
     private final GroupCodeDetailRepository groupCodeDetailRepository;
 
@@ -78,7 +81,7 @@ public class OrderService {
         if (reqSaveOrderDto.getTotalPrice() != totalPrice) throw new InputCheckException("합계 금액이 일치하지 않습니다.");
 
         // 구매자 아이디 확인
-        OrderPurchaserDto orderPurchaserDto = reqSaveOrderDto.getOrderPurchaserDto();
+        ResOrderPurchaserDto orderPurchaserDto = reqSaveOrderDto.getOrderPurchaserDto();
         Member member = memberRepository.findById(orderPurchaserDto.getMemberId()).orElseThrow(()
                 -> new InputCheckException("회원번호를 확인하세요."));
 
@@ -86,11 +89,62 @@ public class OrderService {
         OrderPurchaser orderPurchaser = orderPurchaserDto.dtoToEntity(order, member);
         orderPurchaserRepository.save(orderPurchaser);
 
+        return order.getId();
+    }
+
+    public void updateCompleteOrder(Long orderNo) {
+        // 주문 번호 체크
+        Order order = orderRepository.findById(orderNo).orElseThrow(()
+                -> new InputCheckException("주문번호를 확인하세요."));
+
+        // 주문 상태 체크
+        if (!order.getOrderCode().equals(OrderCode.CRT)) throw new InputCheckException("주문 완료할 수 없는 상태입니다.");
+
         // 주문 완료 상태 저장
         order.changeOrderStatus(OrderCode.COM);
         OrderStatus orderStatuscomplete = new OrderStatus(order, order.getOrderCode());
         orderStatusRepository.save(orderStatuscomplete);
+    }
 
-        return order.getId();
+    public void updateCancelOrder(Long orderNo) {
+        // 주문 번호 체크
+        Order order = orderRepository.findById(orderNo).orElseThrow(()
+                -> new InputCheckException("주문번호를 확인하세요."));
+
+        // 주문 상태 체크
+        if (!order.getOrderCode().equals(OrderCode.CRT)) throw new InputCheckException("주문 취소할 수 없는 상태입니다.");
+
+        // 주문 취소 상태 저장
+        order.changeOrderStatus(OrderCode.CAN);
+        OrderStatus orderStatuscomplete = new OrderStatus(order, order.getOrderCode());
+        orderStatusRepository.save(orderStatuscomplete);
+    }
+
+    public ResOrderDto searchOrder(Long orderNo) {
+        ResOrderDto result = orderRepository.searchOrder(orderNo);
+
+        // 주문 번호 체크
+        if (result == null) throw new InputCheckException("주문번호를 확인하세요.");
+        
+        // 주문 상태명 조회
+        result.setOrderStatusName(groupCodeDetailRepository.findGroupCodeDetail("10003", String.valueOf(result.getOrderCode())));
+
+        // 주문 상태 목록 조회
+        List<OrderStatusDto> orderStatusDtoList = orderStatusRepository.searchOrderStatusList(orderNo);
+        for (OrderStatusDto item : orderStatusDtoList) {
+            item.setOrderStatusName(groupCodeDetailRepository.findGroupCodeDetail("10003", String.valueOf(item.getOrderCode())));
+        }
+        result.setOrderStatusDtoList(orderStatusDtoList);
+
+        // 주문 배송 정보 조회
+        result.setDeliveryDto(deliveryService.searchDeliveryUseOrderNo(orderNo));
+
+        // 주문자 정보 조회
+        result.setOrderPurchaserDto(orderPurchaserRepository.searchOrderPurchaserDto(orderNo));
+
+        // 주문 상품 정보
+        result.setOrderItemDtoList(orderItemRepository.searchOrderItemList(orderNo));
+
+        return result;
     }
 }

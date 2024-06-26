@@ -101,6 +101,29 @@ public class DeliveryRepositoryImpl implements DeliveryRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
+    @Override
+    public ResDeliveryDto searchDeliveryDetailUseOrderNo(Long orderNo) {
+        return queryFactory
+                .select(new QResDeliveryDto(
+                        delivery.id.as("deliveryNo"),
+                        order.id.as("orderNo"),
+                        order.totalPrice,
+                        delivery.deliveryCode,
+                        delivery.receiverName,
+                        delivery.deliveryAddress,
+                        delivery.zipCode,
+                        delivery.phone
+                ))
+                .from(delivery)
+                .join(delivery.order, order)
+                .join(orderItem).on(orderItem.order.eq(order))
+                .join(orderItem.item, item)
+                .where(
+                        delivery.order.id.eq(orderNo),
+                        orderItem.sequence.eq(1)
+                )
+                .fetchOne();    }
+
     private BooleanExpression deliveryNoEq(ReqDeliverySearchFilter reqDeliverySearchFilter) {
         if (reqDeliverySearchFilter.getSearchCd() != null && reqDeliverySearchFilter.getSearchCd().equals("10")) {
             try {

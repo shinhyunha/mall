@@ -1,5 +1,6 @@
 package com.mall.biz.item.controller;
 
+import com.mall.biz.item.dto.req.ReqItemQuantityDto;
 import com.mall.biz.item.dto.req.ReqItemSearchFilter;
 import com.mall.biz.item.dto.req.ReqSaveItemDto;
 import com.mall.biz.item.dto.req.ReqUpdateItemDto;
@@ -75,4 +76,10 @@ public class ItemController {
         return new SuccessResponse();
     }
 
+    @PutMapping("/add/quantity")
+    @Operation(summary = "상품 재고 추가", description = "상품재고를 추가한다.")
+    public SuccessResponse updateItemQuantity(@RequestBody ReqItemQuantityDto reqItemQuantityDto) {
+        itemService.updateItemQuantity(reqItemQuantityDto);
+        return new SuccessResponse();
+    }
 }

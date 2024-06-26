@@ -1,5 +1,6 @@
 package com.mall.biz.delivery.dto.res;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.biz.delivery.entity.Delivery;
 import com.mall.biz.delivery.entity.DeliveryCode;
 import com.mall.biz.item.dto.res.ResItemDto;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ResDeliveryDto {
     @Schema(description = "배송번호")
     private Long deliveryNo;
@@ -25,6 +27,9 @@ public class ResDeliveryDto {
 
     @Schema(description = "배송상품 목록")
     private List<ResOrderItemDto> deliveryItemList;
+
+    @Schema(description = "배송상태 목록")
+    private List<ResDeliverStatusDto> deliveryStatusList;
 
     @Schema(description = "배송상태코드 (공통코드 [10004] , 배송생성[CRT], 배송중[ING], 배송완료[COM], 배송취소[CAN])")
     private DeliveryCode deliveryCode;

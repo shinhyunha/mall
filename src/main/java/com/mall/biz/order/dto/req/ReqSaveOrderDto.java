@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 public class ReqSaveOrderDto {
     private  int totalPrice;
-    private OrderPurchaserDto orderPurchaserDto;
+    private ResOrderPurchaserDto orderPurchaserDto;
     private List<OrderItemDto> orderItemDtoList;
 }
