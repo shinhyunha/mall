@@ -31,7 +31,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     public Page<ResItemListDto> searchItemList(ReqItemSearchFilter reqItemSearchFilter, Pageable pageable) {
         List<ResItemListDto> content = queryFactory
                 .select(new QResItemListDto(
-                        item.id.as("itemId"),
+                        item.id.as("itemNo"),
                         item.name,
                         item.price,
                         item.quantity,

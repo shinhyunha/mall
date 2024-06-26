@@ -1,5 +1,6 @@
 package com.mall.biz.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.biz.item.entity.Item;
 import com.mall.biz.order.entity.Order;
@@ -28,15 +29,19 @@ public class OrderItemDto {
     @Schema(description = "상품 주문 수량", type = "int")
     private int orderQuantity;
 
+    @JsonIgnore
+    private int sequence;
+
     public void setOrderNo(Long orderNo) {
         this.orderNo = orderNo;
     }
 
-    public OrderItem dtoToEntity(Order order, Item item) {
+    public OrderItem dtoToEntity(Order order, Item item, int sequence) {
         return new OrderItem(
                 order,
                 item,
                 this.getItemPrice(),
-                this.getOrderQuantity());
+                this.getOrderQuantity(),
+                this.sequence = sequence);
     }
 }

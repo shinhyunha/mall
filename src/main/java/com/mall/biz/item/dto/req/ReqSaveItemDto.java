@@ -26,11 +26,11 @@ public class ReqSaveItemDto {
     private int quantity;
 
     @NotBlank(message = "상품카테고리는 {valid.notblank}")
-    @Schema(description = "상품카테고리", type = "CategoryCode")
+    @Schema(description = "상품 카테고리코드 (공통코드 [10001] , 상의[TOP], 하의[BOT], 원피스[ONE])", type = "CategoryCode")
     private CategoryCode categoryCode;
 
     @NotBlank(message = "성별코드는 {valid.notblank}")
-    @Schema(description = "성별코드", type = "GenderCode")
+    @Schema(description = "성별 종류코드 (공통코드 [10002] , 남성[MAL], 여성[FMA], 공용[UNS])", type = "GenderCode")
     private GenderCode genderCode;
 
     public Item dtoToEntity() {

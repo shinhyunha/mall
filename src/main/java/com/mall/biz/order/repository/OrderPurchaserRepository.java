@@ -6,5 +6,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderPurchaserRepository extends JpaRepository<OrderPurchaser, Long>, OrderRepositoryCustom, QuerydslPredicateExecutor<OrderPurchaser> {
+public interface OrderPurchaserRepository extends JpaRepository<OrderPurchaser, Long>, QuerydslPredicateExecutor<OrderPurchaser> {
 }

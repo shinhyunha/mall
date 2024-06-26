@@ -29,6 +29,10 @@ public class ReqUpdateItemDto {
     @NotBlank(message = "수량은 {valid.notblank}")
     @Schema(description = "수량", type = "int")
     private int quantity;
+
+    @Schema(description = "상품 카테고리코드 (공통코드 [10001] , 상의[TOP], 하의[BOT], 원피스[ONE])", type = "CategoryCode")
     private CategoryCode categoryCode;
+
+    @Schema(description = "성별 종류코드 (공통코드 [10002] , 남성[MAL], 여성[FMA], 공용[UNS])", type = "GenderCode")
     private GenderCode genderCode;
 }
