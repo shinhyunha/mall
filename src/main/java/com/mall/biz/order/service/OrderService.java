@@ -8,9 +8,11 @@ import com.mall.biz.member.entity.Member;
 import com.mall.biz.member.repository.MemberRepository;
 import com.mall.biz.order.dto.OrderItemDto;
 import com.mall.biz.order.dto.OrderStatusDto;
+import com.mall.biz.order.dto.req.ReqOrderSearchFilter;
 import com.mall.biz.order.dto.req.ResOrderPurchaserDto;
 import com.mall.biz.order.dto.req.ReqSaveOrderDto;
 import com.mall.biz.order.dto.res.ResOrderDto;
+import com.mall.biz.order.dto.res.ResOrderListDto;
 import com.mall.biz.order.entity.*;
 import com.mall.biz.order.repository.OrderItemRepository;
 import com.mall.biz.order.repository.OrderPurchaserRepository;
@@ -18,6 +20,8 @@ import com.mall.biz.order.repository.OrderRepository;
 import com.mall.biz.order.repository.OrderStatusRepository;
 import com.mall.common.exception.InputCheckException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +40,22 @@ public class OrderService {
 
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
+
+    @Transactional(readOnly = true)
+    public Page<ResOrderListDto> searchOrderList(ReqOrderSearchFilter reqOrderSearchFilter, Pageable pageable) {
+        // order 목록 조회
+        Page<ResOrderListDto> result = orderRepository.searchOrderList(reqOrderSearchFilter, pageable);
+
+        // 코드명 입력
+        if (result != null) {
+            for (ResOrderListDto item : result) {
+                item.setOrderStatusName(groupCodeDetailRepository.findGroupCodeDetail("10003", String.valueOf(item.getOrderCode())));
+                item.setDeliveryName(groupCodeDetailRepository.findGroupCodeDetail("10004", String.valueOf(item.getDeliveryCode())));
+            }
+        }
+
+        return result;
+    }
 
     @Transactional
     public Long saveOrder(ReqSaveOrderDto reqSaveOrderDto) {
@@ -92,6 +112,7 @@ public class OrderService {
         return order.getId();
     }
 
+    @Transactional
     public void updateCompleteOrder(Long orderNo) {
         // 주문 번호 체크
         Order order = orderRepository.findById(orderNo).orElseThrow(()
@@ -106,6 +127,7 @@ public class OrderService {
         orderStatusRepository.save(orderStatuscomplete);
     }
 
+    @Transactional
     public void updateCancelOrder(Long orderNo) {
         // 주문 번호 체크
         Order order = orderRepository.findById(orderNo).orElseThrow(()
@@ -120,6 +142,7 @@ public class OrderService {
         orderStatusRepository.save(orderStatuscomplete);
     }
 
+    @Transactional
     public ResOrderDto searchOrder(Long orderNo) {
         ResOrderDto result = orderRepository.searchOrder(orderNo);
 
