@@ -95,6 +95,7 @@ public class SampleService {
         return save;
     }
 
+    @Transactional
     public List<ResRedisSampleListDto> searchRedisSampleList() {
         Iterable<SampleRedis> all = sampleRedisRepository.findAll();
         List<ResRedisSampleListDto> result = new ArrayList<>();
@@ -104,10 +105,17 @@ public class SampleService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public ResSampleRedisDto searchRedisSample(Long id) {
         SampleRedis sampleRedis = sampleRedisRepository.findById(id).orElseThrow(()
-                -> new InputCheckException("id 체크해"));
-
+                -> new InputCheckException("SampleRedis id 체크하세요."));
         return new ResSampleRedisDto(sampleRedis.getId(), sampleRedis.getName());
+    }
+
+    @Transactional
+    public void removeRedisSample(Long id) {
+        SampleRedis findRedis = sampleRedisRepository.findById(id).orElseThrow(()
+                -> new InputCheckException("아이디를 확인하세요."));
+        sampleRedisRepository.delete(findRedis);
     }
 }
