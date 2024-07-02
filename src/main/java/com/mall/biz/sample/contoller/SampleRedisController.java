@@ -54,4 +54,11 @@ public class SampleRedisController {
         SampleRedis result = sampleRedisService.updateRedisSample(updateRedisSampleDto);
         return new SuccessResponse();
     }
+
+    @GetMapping("")
+    @Operation(summary = "redis 전체 조회", description = "redis 전체 조회한다.")
+    public SuccessResponse searchRedisSampleAll() {
+        List<ResSampleRedisDto> result = sampleRedisService.searchRedisSampleAll();
+        return new SuccessResponse(result);
+    }
 }

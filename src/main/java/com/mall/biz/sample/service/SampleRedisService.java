@@ -64,4 +64,15 @@ public class SampleRedisService {
         sampleRedisRepository.save(findSample);
         return findSample;
     }
+
+    @Transactional(readOnly = true)
+    public List<ResSampleRedisDto> searchRedisSampleAll() {
+        Iterable<SampleRedis> all = sampleRedisRepository.findAll();
+        List<ResSampleRedisDto> result = new ArrayList<>();
+        for (SampleRedis item : all) {
+            result.add(new ResSampleRedisDto(item.getId(), item.getName()));
+        }
+
+        return result;
+    }
 }
