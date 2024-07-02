@@ -86,36 +86,4 @@ public class SampleService {
                 -> new InputCheckException("Sample Id를 확인하세요."));
         sampleRepository.delete(sample);
     }
-
-    @Transactional
-    public SampleRedis saveRedisSample(SaveRedisSampleDto saveRedisSampleDto) {
-        System.out.println(saveRedisSampleDto);
-        SampleRedis sampleRedis = saveRedisSampleDto.dtoToEntity();
-        SampleRedis save = sampleRedisRepository.save(sampleRedis);
-        return save;
-    }
-
-    @Transactional
-    public List<ResRedisSampleListDto> searchRedisSampleList() {
-        Iterable<SampleRedis> all = sampleRedisRepository.findAll();
-        List<ResRedisSampleListDto> result = new ArrayList<>();
-        for (SampleRedis sampleRedis : all) {
-            result.add(new ResRedisSampleListDto(sampleRedis.getId(), sampleRedis.getName()));
-        }
-        return result;
-    }
-
-    @Transactional(readOnly = true)
-    public ResSampleRedisDto searchRedisSample(Long id) {
-        SampleRedis sampleRedis = sampleRedisRepository.findById(id).orElseThrow(()
-                -> new InputCheckException("SampleRedis id 체크하세요."));
-        return new ResSampleRedisDto(sampleRedis.getId(), sampleRedis.getName());
-    }
-
-    @Transactional
-    public void removeRedisSample(Long id) {
-        SampleRedis findRedis = sampleRedisRepository.findById(id).orElseThrow(()
-                -> new InputCheckException("아이디를 확인하세요."));
-        sampleRedisRepository.delete(findRedis);
-    }
 }
