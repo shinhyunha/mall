@@ -61,6 +61,7 @@ public class SampleRedisService {
                 -> new InputCheckException("ID를 확인하세요."));
 
         findSample.updateName(updateRedisSampleDto.getName());
+        sampleRedisRepository.save(findSample);
         return findSample;
     }
 }
