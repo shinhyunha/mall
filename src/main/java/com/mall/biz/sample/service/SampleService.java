@@ -6,6 +6,7 @@ import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
 import com.mall.biz.sample.dto.res.ResRedisSampleListDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
+import com.mall.biz.sample.dto.res.ResSampleRedisDto;
 import com.mall.biz.sample.entity.Sample;
 import com.mall.biz.sample.entity.SampleRedis;
 import com.mall.biz.sample.entity.SampleTeam;
@@ -101,5 +102,12 @@ public class SampleService {
             result.add(new ResRedisSampleListDto(sampleRedis.getId(), sampleRedis.getName()));
         }
         return result;
+    }
+
+    public ResSampleRedisDto searchRedisSample(Long id) {
+        SampleRedis sampleRedis = sampleRedisRepository.findById(id).orElseThrow(()
+                -> new InputCheckException("id 체크해"));
+
+        return new ResSampleRedisDto(sampleRedis.getId(), sampleRedis.getName());
     }
 }

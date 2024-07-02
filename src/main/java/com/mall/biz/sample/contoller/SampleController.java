@@ -6,6 +6,7 @@ import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
 import com.mall.biz.sample.dto.res.ResRedisSampleListDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
+import com.mall.biz.sample.dto.res.ResSampleRedisDto;
 import com.mall.biz.sample.entity.SampleRedis;
 import com.mall.biz.sample.service.SampleService;
 import com.mall.common.model.SuccessResponse;
@@ -84,10 +85,10 @@ public class SampleController {
         return new SuccessResponse(result);
     }
 
-    @GetMapping("/redis/list")
-    @Operation(summary = "redis 샘플모두 조회", description = "redis 샘플모두 조회한다.")
-    public SuccessResponse searchRedisSampleList() {
-        List<ResRedisSampleListDto> resRedisSampleListDto = sampleService.searchRedisSampleList();
-        return new SuccessResponse();
+    @GetMapping("/redis/{id}")
+    @Operation(summary = "redis 아이디로 단건 조회", description = "redis 아이디로 단건 조회한다.")
+    public SuccessResponse searchRedisSampleList(@PathVariable(name = "id") Long id) {
+        ResSampleRedisDto result = sampleService.searchRedisSample(id);
+        return new SuccessResponse(result);
     }
 }
