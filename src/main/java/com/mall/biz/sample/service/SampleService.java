@@ -87,10 +87,11 @@ public class SampleService {
     }
 
     @Transactional
-    public void saveRedisSample(SaveRedisSampleDto saveRedisSampleDto) {
+    public SampleRedis saveRedisSample(SaveRedisSampleDto saveRedisSampleDto) {
         System.out.println(saveRedisSampleDto);
         SampleRedis sampleRedis = saveRedisSampleDto.dtoToEntity();
-        sampleRedisRepository.save(sampleRedis);
+        SampleRedis save = sampleRedisRepository.save(sampleRedis);
+        return save;
     }
 
     public List<ResRedisSampleListDto> searchRedisSampleList() {

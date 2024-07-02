@@ -6,6 +6,7 @@ import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
 import com.mall.biz.sample.dto.res.ResRedisSampleListDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
+import com.mall.biz.sample.entity.SampleRedis;
 import com.mall.biz.sample.service.SampleService;
 import com.mall.common.model.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,8 +80,8 @@ public class SampleController {
     @PostMapping("/redis")
     @Operation(summary = "redis 샘플 등록", description = "redis 샘플을 등록한다.")
     public SuccessResponse saveRedisSample(@RequestBody SaveRedisSampleDto saveRedisSampleDto) {
-        sampleService.saveRedisSample(saveRedisSampleDto);
-        return new SuccessResponse();
+        SampleRedis result = sampleService.saveRedisSample(saveRedisSampleDto);
+        return new SuccessResponse(result);
     }
 
     @GetMapping("/redis/list")
