@@ -87,8 +87,15 @@ public class SampleController {
 
     @GetMapping("/redis/{id}")
     @Operation(summary = "redis 아이디로 단건 조회", description = "redis 아이디로 단건 조회한다.")
-    public SuccessResponse searchRedisSampleList(@PathVariable(name = "id") Long id) {
+    public SuccessResponse searchRedisSample(@PathVariable(name = "id") Long id) {
         ResSampleRedisDto result = sampleService.searchRedisSample(id);
         return new SuccessResponse(result);
+    }
+
+    @DeleteMapping("/redis/{id}")
+    @Operation(summary = "redis 아이디로 db 제거", description = "redis 아이디로 db제거한다.")
+    public SuccessResponse removeRedisSample(@PathVariable(name = "id") Long id) {
+        sampleService.removeRedisSample(id);
+        return new SuccessResponse();
     }
 }
