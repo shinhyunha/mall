@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash(value = "sampleRedis", timeToLive = 1000)
+@RedisHash(value = "sample", timeToLive = 1000)
 public class SampleRedis {
     @Id
     private Long id;
