@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @Value("prd")
+    @Value("dev")
     private String activeProfile;
 
     // 사용자 validation 에 대한 예외처리 : Pathvariable 대응
