@@ -1,5 +1,6 @@
 package com.mall.biz.sample.contoller;
 
+import com.mall.biz.sample.dto.req.SaveRedisSampleDto;
 import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
@@ -71,6 +72,13 @@ public class SampleController {
     @Operation(summary = "sample 삭제", description = "sample을 삭제한다.")
     public SuccessResponse removeSample(@PathVariable("id") Long id) {
         sampleService.removeSample(id);
+        return new SuccessResponse();
+    }
+
+    @PostMapping("/redis")
+    @Operation(summary = "redis 샘플 등록", description = "redis 샘플을 등록한다.")
+    public SuccessResponse saveRedisSample(@RequestBody SaveRedisSampleDto saveRedisSampleDto) {
+        sampleService.saveRedisSample(saveRedisSampleDto);
         return new SuccessResponse();
     }
 }

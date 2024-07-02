@@ -1,16 +1,18 @@
 package com.mall.biz.sample.service;
 
+import com.mall.biz.sample.dto.req.SaveRedisSampleDto;
 import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
 import com.mall.biz.sample.entity.Sample;
+import com.mall.biz.sample.entity.SampleRedis;
 import com.mall.biz.sample.entity.SampleTeam;
+import com.mall.biz.sample.repository.SampleRedisRepository;
 import com.mall.biz.sample.repository.SampleRepository;
 import com.mall.biz.sample.repository.SampleTeamRepository;
 import com.mall.common.exception.InputCheckException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.util.List;
 public class SampleService {
     private final SampleRepository sampleRepository;
     private final SampleTeamRepository sampleTeamRepository;
+    private final SampleRedisRepository sampleRedisRepository;
 
     @Transactional(readOnly = true)
     public List<ResSampleDto> searchSampleAll() {
@@ -80,5 +83,12 @@ public class SampleService {
         Sample sample = sampleRepository.findById(id).orElseThrow(()
                 -> new InputCheckException("Sample Id를 확인하세요."));
         sampleRepository.delete(sample);
+    }
+
+    @Transactional
+    public void saveRedisSample(SaveRedisSampleDto saveRedisSampleDto) {
+        System.out.println(saveRedisSampleDto);
+        SampleRedis sampleRedis = saveRedisSampleDto.dtoToEntity();
+        sampleRedisRepository.save(sampleRedis);
     }
 }
