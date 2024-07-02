@@ -4,6 +4,7 @@ import com.mall.biz.sample.dto.req.SaveRedisSampleDto;
 import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
+import com.mall.biz.sample.dto.res.ResRedisSampleListDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
 import com.mall.biz.sample.service.SampleService;
 import com.mall.common.model.SuccessResponse;
@@ -79,6 +80,13 @@ public class SampleController {
     @Operation(summary = "redis 샘플 등록", description = "redis 샘플을 등록한다.")
     public SuccessResponse saveRedisSample(@RequestBody SaveRedisSampleDto saveRedisSampleDto) {
         sampleService.saveRedisSample(saveRedisSampleDto);
+        return new SuccessResponse();
+    }
+
+    @GetMapping("/redis/list")
+    @Operation(summary = "redis 샘플모두 조회", description = "redis 샘플모두 조회한다.")
+    public SuccessResponse searchRedisSampleList() {
+        List<ResRedisSampleListDto> resRedisSampleListDto = sampleService.searchRedisSampleList();
         return new SuccessResponse();
     }
 }

@@ -4,6 +4,7 @@ import com.mall.biz.sample.dto.req.SaveRedisSampleDto;
 import com.mall.biz.sample.dto.req.SaveSampleDto;
 import com.mall.biz.sample.dto.req.SaveTeamDto;
 import com.mall.biz.sample.dto.req.UpdateSampleDto;
+import com.mall.biz.sample.dto.res.ResRedisSampleListDto;
 import com.mall.biz.sample.dto.res.ResSampleDto;
 import com.mall.biz.sample.entity.Sample;
 import com.mall.biz.sample.entity.SampleRedis;
@@ -90,5 +91,14 @@ public class SampleService {
         System.out.println(saveRedisSampleDto);
         SampleRedis sampleRedis = saveRedisSampleDto.dtoToEntity();
         sampleRedisRepository.save(sampleRedis);
+    }
+
+    public List<ResRedisSampleListDto> searchRedisSampleList() {
+        Iterable<SampleRedis> all = sampleRedisRepository.findAll();
+        List<ResRedisSampleListDto> result = new ArrayList<>();
+        for (SampleRedis sampleRedis : all) {
+            result.add(new ResRedisSampleListDto(sampleRedis.getId(), sampleRedis.getName()));
+        }
+        return result;
     }
 }
