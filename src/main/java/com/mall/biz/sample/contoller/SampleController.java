@@ -77,25 +77,4 @@ public class SampleController {
         sampleService.removeSample(id);
         return new SuccessResponse();
     }
-
-    @PostMapping("/redis")
-    @Operation(summary = "redis 샘플 등록", description = "redis 샘플을 등록한다.")
-    public SuccessResponse saveRedisSample(@RequestBody SaveRedisSampleDto saveRedisSampleDto) {
-        SampleRedis result = sampleService.saveRedisSample(saveRedisSampleDto);
-        return new SuccessResponse(result);
-    }
-
-    @GetMapping("/redis/{id}")
-    @Operation(summary = "redis 아이디로 단건 조회", description = "redis 아이디로 단건 조회한다.")
-    public SuccessResponse searchRedisSample(@PathVariable(name = "id") Long id) {
-        ResSampleRedisDto result = sampleService.searchRedisSample(id);
-        return new SuccessResponse(result);
-    }
-
-    @DeleteMapping("/redis/{id}")
-    @Operation(summary = "redis 아이디로 db 제거", description = "redis 아이디로 db제거한다.")
-    public SuccessResponse removeRedisSample(@PathVariable(name = "id") Long id) {
-        sampleService.removeRedisSample(id);
-        return new SuccessResponse();
-    }
 }
