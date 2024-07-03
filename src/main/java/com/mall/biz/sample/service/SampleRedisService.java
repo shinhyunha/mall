@@ -26,26 +26,10 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 public class SampleRedisService {
     private final SampleRedisRepository sampleRedisRepository;
-    private final AtomicLong idCounter = new AtomicLong();
-
-    @PostConstruct
-    private void init() {
-        // Redis id 체크
-        List<SampleRedis> samples = StreamSupport.stream(sampleRedisRepository.findAll().spliterator(), false)
-                .toList();
-
-        if (samples != null && !samples.isEmpty()) {
-            long maxId = samples.stream().mapToLong(SampleRedis::getId).max().orElse(0);
-            idCounter.set(maxId);
-        } else {
-            idCounter.set(0);
-        }
-    }
 
     @Transactional
     public SampleRedis saveRedisSample(SaveRedisSampleDto saveRedisSampleDto) {
         System.out.println(saveRedisSampleDto);
-        saveRedisSampleDto.setId(idCounter);
         SampleRedis sampleRedis = saveRedisSampleDto.dtoToEntity();
         return sampleRedisRepository.save(sampleRedis);
     }
