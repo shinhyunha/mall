@@ -11,24 +11,43 @@ import com.mall.biz.sample.repository.SampleRedisRepository;
 import com.mall.biz.sample.repository.SampleRepository;
 import com.mall.biz.sample.repository.SampleTeamRepository;
 import com.mall.common.exception.InputCheckException;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class SampleRedisService {
     private final SampleRedisRepository sampleRedisRepository;
+    private final AtomicLong idCounter = new AtomicLong();
+
+    @PostConstruct
+    private void init() {
+        // Redis id 체크
+        List<SampleRedis> samples = StreamSupport.stream(sampleRedisRepository.findAll().spliterator(), false)
+                .toList();
+
+        if (!samples.isEmpty()) {
+            long maxId = samples.stream().mapToLong(SampleRedis::getId).max().orElse(0);
+            idCounter.set(maxId);
+        } else {
+            idCounter.set(0);
+        }
+    }
 
     @Transactional
     public SampleRedis saveRedisSample(SaveRedisSampleDto saveRedisSampleDto) {
         System.out.println(saveRedisSampleDto);
+        saveRedisSampleDto.setId(idCounter);
         SampleRedis sampleRedis = saveRedisSampleDto.dtoToEntity();
-        SampleRedis save = sampleRedisRepository.save(sampleRedis);
-        return save;
+        return sampleRedisRepository.save(sampleRedis);
     }
 
     @Transactional
