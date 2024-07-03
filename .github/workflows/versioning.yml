@@ -1,0 +1,29 @@
+name: github action tag release
+
+on:
+  push:
+    branches:     # 버전관리에 사용할 브랜치 작성
+      - main      # main에 Push할 때 작동함
+      - dev       # dev에 Push할 때 작동함
+
+jobs:
+  release-version:
+    runs-on: ubuntu-latest # 동작하는 환경
+    permissions:
+      packages: write
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Bump version and push tag   # tag 생성
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1  # 사용 모듈
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+
+      - name: Create a GitHub release     # github release
+        uses: ncipollo/release-action@v1  # 사용 모듈
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
