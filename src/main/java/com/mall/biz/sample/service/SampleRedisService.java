@@ -34,7 +34,7 @@ public class SampleRedisService {
         List<SampleRedis> samples = StreamSupport.stream(sampleRedisRepository.findAll().spliterator(), false)
                 .toList();
 
-        if (!samples.isEmpty()) {
+        if (samples != null && !samples.isEmpty()) {
             long maxId = samples.stream().mapToLong(SampleRedis::getId).max().orElse(0);
             idCounter.set(maxId);
         } else {
