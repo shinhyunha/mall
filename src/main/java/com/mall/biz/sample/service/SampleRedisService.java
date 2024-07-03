@@ -54,14 +54,14 @@ public class SampleRedisService {
     @Transactional
     public void removeRedisSample(Long id) {
         SampleRedis findRedis = sampleRedisRepository.findById(id).orElseThrow(()
-                -> new InputCheckException("아이디를 확인하세요."));
+                -> new InputCheckException("SampleRedis id 체크하세요."));
         sampleRedisRepository.delete(findRedis);
     }
 
     @Transactional
     public SampleRedis updateRedisSample(UpdateRedisSampleDto updateRedisSampleDto) {
         SampleRedis findSample = sampleRedisRepository.findById(updateRedisSampleDto.getId()).orElseThrow(()
-                -> new InputCheckException("ID를 확인하세요."));
+                -> new InputCheckException("SampleRedis id 체크하세요."));
 
         findSample.updateName(updateRedisSampleDto.getName());
         sampleRedisRepository.save(findSample);
