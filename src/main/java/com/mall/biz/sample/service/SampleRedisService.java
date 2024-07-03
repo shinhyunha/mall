@@ -61,7 +61,7 @@ public class SampleRedisService {
     @Transactional
     public SampleRedis updateRedisSample(UpdateRedisSampleDto updateRedisSampleDto) {
         SampleRedis findSample = sampleRedisRepository.findById(updateRedisSampleDto.getId()).orElseThrow(()
-                -> new InputCheckException("SampleRedis id 체크하세요."));
+                -> new InputCheckException("SampleRedis id 체크하세요"));
 
         findSample.updateName(updateRedisSampleDto.getName());
         sampleRedisRepository.save(findSample);
