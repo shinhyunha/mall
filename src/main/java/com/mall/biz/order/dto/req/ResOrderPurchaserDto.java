@@ -6,11 +6,11 @@ import com.mall.biz.order.entity.Order;
 import com.mall.biz.order.entity.OrderPurchaser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Data
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ResOrderPurchaserDto {
     @Schema(description = "주문 번호", type = "Long")
@@ -36,5 +36,13 @@ public class ResOrderPurchaserDto {
                 this.getName(),
                 this.getEmail(),
                 this.getPhone());
+    }
+
+    public ResOrderPurchaserDto(Long orderNo, String memberId, String name, String email, String phone) {
+        this.orderNo = orderNo;
+        this.memberId = memberId;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
     }
 }

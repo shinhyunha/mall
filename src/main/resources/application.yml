@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   # redis
   redis:
-    host: shin-redis.uha59d.ng.0001.apn2.cache.amazonaws.com
+    host: 127.0.0.1
     port: 6379
   # jpa
   jpa:
