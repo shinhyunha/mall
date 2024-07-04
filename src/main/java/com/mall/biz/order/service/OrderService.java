@@ -14,17 +14,21 @@ import com.mall.biz.order.dto.req.ReqSaveOrderDto;
 import com.mall.biz.order.dto.res.ResOrderDto;
 import com.mall.biz.order.dto.res.ResOrderListDto;
 import com.mall.biz.order.entity.*;
+import com.mall.biz.order.entity.redis.OrderRedis;
 import com.mall.biz.order.repository.OrderItemRepository;
 import com.mall.biz.order.repository.OrderPurchaserRepository;
 import com.mall.biz.order.repository.OrderRepository;
 import com.mall.biz.order.repository.OrderStatusRepository;
+import com.mall.biz.order.repository.redis.OrderRedisRepository;
 import com.mall.common.exception.InputCheckException;
+import com.mall.common.utils.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,6 +39,7 @@ public class OrderService {
     private final OrderPurchaserRepository orderPurchaserRepository;
     private final OrderStatusRepository orderStatusRepository;
     private final DeliveryService deliveryService;
+    private final OrderRedisRepository orderRedisRepository;
 
     private final GroupCodeDetailRepository groupCodeDetailRepository;
 
@@ -57,10 +62,104 @@ public class OrderService {
         return result;
     }
 
+//    @Transactional
+//    public Long saveOrder(ReqSaveOrderDto reqSaveOrderDto) {
+//        // order 생성
+//        Order order = new Order(OrderCode.CRT, reqSaveOrderDto.getTotalPrice());
+//        orderRepository.save(order);
+//
+//        // 주문 상태 저장
+//        OrderStatus orderStatus = new OrderStatus(order, order.getOrderCode());
+//        orderStatusRepository.save(orderStatus);
+//
+//        // 전체 금액 계산용
+//        int totalPrice = 0;
+//        // 주문 상품 확인
+//        if (reqSaveOrderDto.getOrderItemDtoList() != null) {
+//            List<OrderItemDto> orderItemDtoList = reqSaveOrderDto.getOrderItemDtoList();
+//            int count = 1;
+//            for (OrderItemDto orderItemDto : orderItemDtoList) {
+//                // 상품 아이디 확인
+//                Item item = itemRepository.findById(orderItemDto.getItemNo()).orElseThrow(()
+//                        -> new InputCheckException("상품 아이디를 확인하세요."));
+//
+//                // 상품 가격확인
+//                if (item.checkItemPrice(orderItemDto.getItemPrice()))
+//                    throw new InputCheckException("상품 가격이 불일치합니다.");
+//
+//                // 상품 재고 수량 확인
+//                if (item.checkItemQuantity(orderItemDto.getOrderQuantity()))
+//                    throw new InputCheckException("상품 재고가 부족합니다.");
+//
+//                // 상품 재고 줄이기
+//                item.reduceQuantity(orderItemDto.getOrderQuantity());
+//
+//                // 상품별 totalPrice 추가
+//                totalPrice += item.calculateTotalPrice(orderItemDto.getOrderQuantity());
+//
+//                // OrderItemDto 저장
+//                OrderItem orderItem = orderItemDto.dtoToEntity(order, item, count++);
+//                orderItemRepository.save(orderItem);
+//            }
+//        }
+//
+//        if (reqSaveOrderDto.getTotalPrice() != totalPrice) throw new InputCheckException("합계 금액이 일치하지 않습니다.");
+//
+//        // 구매자 아이디 확인
+//        ResOrderPurchaserDto orderPurchaserDto = reqSaveOrderDto.getOrderPurchaserDto();
+//        Member member = memberRepository.findById(orderPurchaserDto.getMemberId()).orElseThrow(()
+//                -> new InputCheckException("회원번호를 확인하세요."));
+//
+//        // order purchaser 생성
+//        OrderPurchaser orderPurchaser = orderPurchaserDto.dtoToEntity(order, member);
+//        orderPurchaserRepository.save(orderPurchaser);
+//
+//        return order.getId();
+//    }
+
+    /**
+     * redis 과정 추가
+     * */
     @Transactional
-    public Long saveOrder(ReqSaveOrderDto reqSaveOrderDto) {
+    public String saveOrderRedis(ReqSaveOrderDto reqSaveOrderDto) {
+        // redis 아이디 생성
+        String redisId = CommonUtils.getUUID() + "DT" + LocalDateTime.now();
+
+        try {
+            // redis 저장
+             OrderRedis orderRedis = OrderRedis.builder()
+                    .id(redisId)
+                    .orderStatus(String.valueOf(OrderCode.CRT))
+                    .totalPrice(reqSaveOrderDto.getTotalPrice())
+                    .memberId(reqSaveOrderDto.getOrderPurchaserDto().getMemberId())
+                    .name(reqSaveOrderDto.getOrderPurchaserDto().getName())
+                    .email(reqSaveOrderDto.getOrderPurchaserDto().getEmail())
+                    .phone(reqSaveOrderDto.getOrderPurchaserDto().getPhone().replace("-", ""))
+                    .itemList(reqSaveOrderDto.getOrderItemDtoList())
+                    .build();
+            // redis 주문생성 상태로 저장
+            orderRedisRepository.save(orderRedis);
+
+        } catch (Exception e) {
+            // 생성 데이터 삭제
+            OrderRedis orderRedis = orderRedisRepository.findById(redisId).orElseThrow(()
+                    -> new InputCheckException("Redis 저장에 실패했습니다."));
+            orderRedisRepository.delete(orderRedis);
+
+            throw new InputCheckException("Redis 저장에 실패했습니다.");
+        }
+
+        return redisId;
+    }
+
+    @Transactional
+    public Long saveOrder(String redisId) {
+        // redis 데이터 확인
+        OrderRedis findeOrderRedis = orderRedisRepository.findById(redisId).orElseThrow(()
+                -> new InputCheckException("redis ID를 확인하세요."));
+
         // order 생성
-        Order order = new Order(OrderCode.CRT, reqSaveOrderDto.getTotalPrice());
+        Order order = new Order(OrderCode.CRT, findeOrderRedis.getTotalPrice());
         orderRepository.save(order);
 
         // 주문 상태 저장
@@ -70,8 +169,8 @@ public class OrderService {
         // 전체 금액 계산용
         int totalPrice = 0;
         // 주문 상품 확인
-        if (reqSaveOrderDto.getOrderItemDtoList() != null) {
-            List<OrderItemDto> orderItemDtoList = reqSaveOrderDto.getOrderItemDtoList();
+        if (findeOrderRedis.getItemList() != null) {
+            List<OrderItemDto> orderItemDtoList = findeOrderRedis.getItemList();
             int count = 1;
             for (OrderItemDto orderItemDto : orderItemDtoList) {
                 // 상품 아이디 확인
@@ -98,16 +197,34 @@ public class OrderService {
             }
         }
 
-        if (reqSaveOrderDto.getTotalPrice() != totalPrice) throw new InputCheckException("합계 금액이 일치하지 않습니다.");
+        if (findeOrderRedis.getTotalPrice() != totalPrice) throw new InputCheckException("합계 금액이 일치하지 않습니다.");
 
         // 구매자 아이디 확인
-        ResOrderPurchaserDto orderPurchaserDto = reqSaveOrderDto.getOrderPurchaserDto();
+        ResOrderPurchaserDto orderPurchaserDto = new ResOrderPurchaserDto(
+                order.getId(),
+                findeOrderRedis.getMemberId(),
+                findeOrderRedis.getName(),
+                findeOrderRedis.getEmail(),
+                findeOrderRedis.getPhone()
+        );
+//        ResOrderPurchaserDto orderPurchaserDto = ResOrderPurchaserDto.builder()
+//                .orderNo(order.getId())
+//                .memberId(findeOrderRedis.getMemberId())
+//                .name(findeOrderRedis.getName())
+//                .email(findeOrderRedis.getEmail())
+//                .phone(findeOrderRedis.getPhone())
+//                .build();
         Member member = memberRepository.findById(orderPurchaserDto.getMemberId()).orElseThrow(()
                 -> new InputCheckException("회원번호를 확인하세요."));
 
         // order purchaser 생성
         OrderPurchaser orderPurchaser = orderPurchaserDto.dtoToEntity(order, member);
         orderPurchaserRepository.save(orderPurchaser);
+
+        // redis 데이터 삭제
+        OrderRedis orderRedis = orderRedisRepository.findById(redisId).orElseThrow(()
+                -> new InputCheckException("Redis Id를 확인하세요."));
+        orderRedisRepository.delete(orderRedis);
 
         return order.getId();
     }

@@ -93,10 +93,12 @@ public class DeliveryService {
         ResDeliveryDto result = deliveryRepository.searchDeliveryDetailUseOrderNo(orderNo);
 
         // 배송 정보 미조회시 예외 처리
-        if (result == null) throw new InputCheckException("주문번호를 확인하세요");
-
-        // 공통코드명 조회
-        result.setDeliveryName(groupCodeDetailRepository.findGroupCodeDetail("10004", String.valueOf(result.getDeliveryCode())));
+        if (result == null) {
+            return null;
+        } else {
+            // 공통코드명 조회
+            result.setDeliveryName(groupCodeDetailRepository.findGroupCodeDetail("10004", String.valueOf(result.getDeliveryCode())));
+        }
 
         return result;
     }

@@ -60,12 +60,26 @@ public class OrderController {
         return new SuccessResponse(result);
     }
 
-    @PostMapping("")
-    @Operation(summary = "주문 등록", description = "주문을 등록한다.")
-    public SuccessResponse saveOrder(@RequestBody @Valid ReqSaveOrderDto reqSaveOrderDto) {
-        Long orderNo = orderService.saveOrder(reqSaveOrderDto);
+    @PostMapping("/redis")
+    @Operation(summary = "주문 redis 등록", description = "주문을 Redis dB에 등록한다.")
+    public SuccessResponse saveOrderRedis(@RequestBody @Valid ReqSaveOrderDto reqSaveOrderDto) {
+        String redisId = orderService.saveOrderRedis(reqSaveOrderDto);
+        return new SuccessResponse(redisId);
+    }
+
+    @PostMapping("/create/{redisId}")
+    @Operation(summary = "Redis 데이터를 활용한 주문 생성", description = "Redis 데이터를 활용하여 주문을 생성한다.")
+    public SuccessResponse saveOrder(@PathVariable("redisId") String redisId) {
+        Long orderNo = orderService.saveOrder(redisId);
         return new SuccessResponse(orderNo);
     }
+
+//    @PostMapping("")
+//    @Operation(summary = "주문 등록", description = "주문을 등록한다.")
+//    public SuccessResponse saveOrder(@RequestBody @Valid ReqSaveOrderDto reqSaveOrderDto) {
+//        Long orderNo = orderService.saveOrder(reqSaveOrderDto);
+//        return new SuccessResponse(orderNo);
+//    }
 
     @PutMapping("/complete/{orderNo}")
     @Operation(summary = "주문 완료", description = "주문 완료상태를 등록한다.")
